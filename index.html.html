@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Escape Game – Le coffre du Domaine du Lac Vert</title>
+<style>
+:root{--bg:#f1f6f1;--card:#fff;--tx:#1f2a24;--mu:#66746b;--ac:#2f7d4f;--bt:#fff;--ok:#17803d;--ko:#b42318;--bd:#d3e0d5;--soft:#e6f1e8;--hd:#1f4d36;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101613;--card:#18211c;--tx:#e8efe9;--mu:#98a79d;--ac:#6fcf97;--bt:#0b130e;--ok:#4ade80;--ko:#f87171;--bd:#2a362f;--soft:#202b25;--hd:#0c1a12;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#101613;--card:#18211c;--tx:#e8efe9;--mu:#98a79d;--ac:#6fcf97;--bt:#0b130e;--ok:#4ade80;--ko:#f87171;--bd:#2a362f;--soft:#202b25;--hd:#0c1a12;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+main{max-width:720px;margin:0 auto;padding:0 12px 30px}
+h1{font-family:Georgia,serif;margin:.2em 0;font-size:1.5rem}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;border-bottom:1px solid var(--bd)}
+.logo{font-family:Georgia,serif;color:var(--ac)}
+#clk{font-weight:700;font-variant-numeric:tabular-nums}
+.low{color:var(--ko)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin:12px 0}
+.hero{background:linear-gradient(135deg,var(--hd),#2f7d4f);color:#fff;border-radius:14px;padding:16px;margin:12px 0}
+.hero .big{font-size:2.4rem;line-height:1}
+.hero p{margin:.3em 0;opacity:.92}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:12px 0}
+.obj{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;background:var(--card);color:var(--tx);border:2px solid var(--bd);border-radius:14px;padding:12px 8px;cursor:pointer;font:inherit;margin:0;transition:transform .15s,border-color .15s}
+.obj:hover{transform:translateY(-3px);border-color:var(--ac)}
+.obj .ic{font-size:2.2rem}.obj small{color:var(--mu)}
+.obj.dn{border-color:var(--ok);background:var(--soft)}
+.chip{display:inline-block;font-size:.78rem;padding:2px 10px;border-radius:99px;background:var(--soft);color:var(--mu);margin-bottom:6px}
+.slots{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.slots span{width:38px;height:46px;border:2px solid var(--bd);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;color:var(--mu);background:var(--soft)}
+.slots .on{border-color:var(--ok);color:var(--ok)}
+input{font:inherit;padding:10px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx);width:58%;max-width:230px;box-sizing:border-box}
+button{font:inherit;padding:10px 16px;border-radius:10px;border:1px solid var(--ac);background:var(--ac);color:var(--bt);cursor:pointer;margin:6px 6px 0 0}
+button.sec{background:transparent;color:var(--ac)}
+button.opt{display:block;width:100%;text-align:left;background:var(--card);color:var(--tx);border-color:var(--bd)}
+.memo{border-left:4px solid var(--ac);background:var(--soft);padding:8px 10px;border-radius:6px;margin:8px 0}
+.ko{background:color-mix(in srgb,var(--ko) 15%,transparent);color:var(--ko);padding:8px 10px;border-radius:8px;margin-top:8px}
+.okb{background:color-mix(in srgb,var(--ok) 15%,transparent);padding:8px 10px;border-radius:8px;margin-top:8px}
+.mu{color:var(--mu);font-size:.9rem}.center{text-align:center}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:20;overflow:auto;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px))}
+.md{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;max-width:640px;margin:0 auto}
+.w{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:.8rem;margin:6px 0}
+td,th{border:1px solid var(--bd);padding:4px 6px;text-align:right}td:first-child,th:first-child{text-align:left}th{background:var(--soft)}
+</style></head><body><main id="app"></main>
+<script>
+var D={r:{ca:309960,a:105800,v:-1200,pc:2300},h:{ca:330480,a:12400,v:520},p:{ca:58178,a:10900,v:-250},sal:186000,cs:65100,ti:3900,aut:175000,cb:4600,loy:30200,imp:21400,acg:2600,com:5400,dot:57300,int:12800,lou:4860,cli:8262,cov:13800,cvh:2150,pdj:6124};
+var K={cr:D.r.a+D.r.v-D.r.pc,ch:D.h.a+D.h.v,cp:D.p.a+D.p.v,ca:D.r.ca+D.h.ca+D.p.ca};
+K.co=K.cr+K.ch+K.cp;K.mb=K.ca-K.co;K.pe=D.sal+D.cs+D.ti;K.mcp=K.mb-K.pe;
+K.fg=D.aut-D.ti-D.cb-D.loy+D.imp+D.acg+D.com;K.rbe=K.mcp-K.fg;K.oc=D.loy+D.cb+D.dot+D.int;K.rc=K.rbe-K.oc;
+var CH=30*300,CR=48*2*250;
+function fmt(n,d){return n.toLocaleString("fr-FR",{maximumFractionDigits:d==null?2:d})}
+function r1(x){return Math.round(x*10)/10}
+function pc(x){return r1(x/K.ca*100)}
+function T(a){return '<div class="w"><table>'+a.map(function(r,i){return "<tr>"+r.map(function(c){return i?"<td>"+c+"</td>":"<th>"+c+"</th>"}).join("")+"</tr>"}).join("")+"</table></div>"}
+var R=[["🛎️","Le hall d’accueil","Les consommations de matières et les charges de personnel."],["📒","Le bureau de la comptabilité","Frais généraux, coût d’occupation et soldes intermédiaires."],["📈","La salle de direction","Ratios et diagnostic par rapport aux normes de la profession."],["🏔️","Le belvédère","Les indicateurs commerciaux de l’hôtel et du restaurant."]];
+var DG=[[7,2,9,4,1],[3,8,5,0,6],[1,6,4,9,2],[5,0,8,3,7,2]],FIN="4186";
+var DOS='<p><b>Domaine du Lac Vert</b> (Annecy), gérante Mme Lenoir. Hôtel : 30 chambres ouvertes 300 jours/an. Restaurant : 48 couverts à midi et le soir, 250 jours/an. Exercice 2025.</p>'+
+T([["€","Restauration","Hébergement","Petits déj."],["CA HT",fmt(D.r.ca),fmt(D.h.ca),fmt(D.p.ca)],["Achats de matières",fmt(D.r.a),fmt(D.h.a),fmt(D.p.a)],["Variation de stocks (SI − SF)",fmt(D.r.v),"+"+fmt(D.h.v),fmt(D.p.v)],["Production consommée",fmt(D.r.pc),"–","–"]])+
+'<p class="mu">Salaires <b>'+fmt(D.sal)+'</b> · Charges sociales <b>'+fmt(D.cs)+'</b> · Autres achats et charges externes <b>'+fmt(D.aut)+'</b> (dont intérim '+fmt(D.ti)+', crédit-bail '+fmt(D.cb)+', loyers '+fmt(D.loy)+') · Impôts et taxes <b>'+fmt(D.imp)+'</b> · Autres charges de gestion <b>'+fmt(D.acg)+'</b> · Commissions sur cartes bancaires (charges financières) <b>'+fmt(D.com)+'</b> · Dotations aux amortissements <b>'+fmt(D.dot)+'</b> · Intérêts d’emprunt <b>'+fmt(D.int)+'</b></p>'+
+'<p class="mu">Fréquentation 2025 : chambres louées <b>'+fmt(D.lou)+'</b> · clients de l’hôtel <b>'+fmt(D.cli)+'</b> · couverts servis <b>'+fmt(D.cov)+'</b> (dont '+fmt(D.cvh)+' clients de l’hôtel) · petits déjeuners servis <b>'+fmt(D.pdj)+'</b></p>'+
+'<p class="mu"><b>Normes :</b> consommations restaurant 30–35 % · hébergement 2–3,5 % · petits déj. 15–20 % · personnel 32–35 % · frais généraux &lt; 20 % · résultat courant 8–12 %.</p>'+
+'<p class="mu"><b>Formules :</b> Consommation restauration = achats ± variation de stocks − production consommée · Marge brute = CA − consommations · MCP = marge brute − personnel · RBE = MCP − frais généraux · Résultat courant = RBE − coût d’occupation.</p>';
+var Q=[
+{r:0,ic:"📜",nm:"L’affiche du tableau de gestion",q:"Mme Lenoir veut connaître le CA et les consommations <b>par activité</b> et se comparer aux établissements de même catégorie. Le tableau des SIG suffit-il ?",o:["Non : le tableau de gestion, support propre à l’entreprise à présentation libre, distingue les activités et se compare aux normes de la profession","Oui : les SIG, support normalisé, détaillent déjà chaque activité","Oui : le tableau de gestion est un document obligatoire identique pour tous","Non : seul le bilan permet cette analyse"],k:0,h:"Les SIG sont normalisés mais globaux.",m:"Les SIG (support normalisé) donnent des soldes globaux. Le tableau de gestion (support propre, présentation libre) isole les activités."},
+{r:0,ic:"🍳",nm:"Le carnet de cuisine",q:"Calculez les <b>consommations de matières de la restauration</b> (€). Pensez à la production consommée.",a:K.cr,tol:1,h:"Achats ± variation de stocks (déjà signée) − production consommée.",m:fmt(D.r.a)+" + ("+fmt(D.r.v)+") − "+fmt(D.r.pc)+" = <b>"+fmt(K.cr)+" €</b>."},
+{r:0,ic:"🛏️",nm:"La lingerie",q:"Calculez les <b>consommations de matières de l’hébergement</b> (€).",a:K.ch,tol:1,h:"Achats + variation de stocks (+520).",m:fmt(D.h.a)+" + "+fmt(D.h.v)+" = <b>"+fmt(K.ch)+" €</b>."},
+{r:0,ic:"🥐",nm:"Le chariot petit-déjeuner",q:"Calculez les <b>consommations de matières des petits déjeuners</b> (€).",a:K.cp,tol:1,h:"Achats + variation de stocks (−250).",m:fmt(D.p.a)+" + ("+fmt(D.p.v)+") = <b>"+fmt(K.cp)+" €</b>."},
+{r:0,ic:"👥",nm:"Le planning du personnel",q:"Calculez le <b>coût du personnel</b> (€). Attention au personnel intérimaire.",a:K.pe,tol:1,h:"Salaires + charges sociales + intérim (comptabilisé dans les autres achats et charges externes).",m:fmt(D.sal)+" + "+fmt(D.cs)+" + "+fmt(D.ti)+" = <b>"+fmt(K.pe)+" €</b>."},
+{r:1,ic:"🗃️",nm:"Le classeur des factures",q:"Calculez les <b>frais généraux</b> (€).",a:K.fg,tol:1,h:"Autres achats et charges externes − intérim − loyers − crédit-bail + impôts et taxes + autres charges de gestion + commissions CB.",m:fmt(D.aut)+" − "+fmt(D.ti)+" − "+fmt(D.loy)+" − "+fmt(D.cb)+" + "+fmt(D.imp)+" + "+fmt(D.acg)+" + "+fmt(D.com)+" = <b>"+fmt(K.fg)+" €</b>."},
+{r:1,ic:"🏦",nm:"Le relevé bancaire",q:"Calculez le <b>coût d’occupation</b> (€).",a:K.oc,tol:1,h:"Loyers + crédit-bail + dotations aux amortissements + intérêts d’emprunt.",m:fmt(D.loy)+" + "+fmt(D.cb)+" + "+fmt(D.dot)+" + "+fmt(D.int)+" = <b>"+fmt(K.oc)+" €</b>."},
+{r:1,ic:"🧮",nm:"La calculatrice",q:"Calculez la <b>marge brute totale</b> (€).",a:K.mb,tol:1,h:"CA total (somme des 3 activités) − total des consommations.",m:"CA total "+fmt(K.ca)+" − consommations "+fmt(K.co)+" = <b>"+fmt(K.mb)+" €</b>."},
+{r:1,ic:"📑",nm:"Le grand livre",q:"Calculez la <b>marge sur coût principal</b> (€).",a:K.mcp,tol:1,h:"Marge brute − coût du personnel.",m:fmt(K.mb)+" − "+fmt(K.pe)+" = <b>"+fmt(K.mcp)+" €</b>."},
+{r:1,ic:"🖥️",nm:"Le logiciel de gestion",q:"Calculez le <b>résultat brut d’exploitation (RBE)</b> (€).",a:K.rbe,tol:1,h:"Marge sur coût principal − frais généraux.",m:fmt(K.mcp)+" − "+fmt(K.fg)+" = <b>"+fmt(K.rbe)+" €</b>."},
+{r:2,ic:"🔎",nm:"La loupe du contrôleur",q:"Calculez le <b>résultat courant avant impôts</b> (€).",a:K.rc,tol:1,h:"RBE − coût d’occupation.",m:fmt(K.rbe)+" − "+fmt(K.oc)+" = <b>"+fmt(K.rc)+" €</b>."},
+{r:2,ic:"🍽️",nm:"Le menu du restaurant",q:"Quel est le <b>ratio de consommations de la restauration</b> (% du CA restaurant, 1 décimale) ?",a:r1(K.cr/D.r.ca*100),tol:.1,h:"Consommations restauration ÷ CA restauration × 100.",m:fmt(K.cr)+" ÷ "+fmt(D.r.ca)+" × 100 = <b>"+fmt(r1(K.cr/D.r.ca*100),1)+" %</b> (norme 30–35 % : conforme)."},
+{r:2,ic:"👔",nm:"Le dossier RH",q:"Quel est le <b>ratio du coût du personnel</b> (% du CA total, 1 décimale) ?",a:pc(K.pe),tol:.1,h:"Coût du personnel ÷ CA total × 100.",m:fmt(K.pe)+" ÷ "+fmt(K.ca)+" × 100 = <b>"+fmt(pc(K.pe),1)+" %</b> (norme 32–35 % : trop élevé)."},
+{r:2,ic:"📊",nm:"Le graphique des résultats",q:"Quel est le <b>ratio du résultat courant</b> (% du CA total, 1 décimale) ?",a:pc(K.rc),tol:.1,h:"RCAI ÷ CA total × 100.",m:fmt(K.rc)+" ÷ "+fmt(K.ca)+" × 100 = <b>"+fmt(pc(K.rc),1)+" %</b> (norme 8–12 % : insuffisant)."},
+{r:2,ic:"🧠",nm:"Le tableau blanc",q:"<b>Diagnostic :</b> quels ratios sont hors des normes de la profession ?",o:["Personnel ("+fmt(pc(K.pe),1)+" %), frais généraux ("+fmt(pc(K.fg),1)+" %), consommations hébergement ("+fmt(r1(K.ch/D.h.ca*100),1)+" % du CA hébergement) et résultat courant ("+fmt(pc(K.rc),1)+" %)","Uniquement la restauration","Aucun : tous les ratios respectent les normes","Uniquement le résultat courant"],k:0,h:"Comparez chaque ratio à sa norme.",m:"Personnel, frais généraux, consommations d’hébergement et résultat courant sortent des normes. Pistes : masse salariale, charges externes, contrôle des consommations d’hébergement."},
+{r:3,ic:"🛌",nm:"Le registre des chambres",q:"Calculez le <b>prix moyen chambre</b> (€, 2 décimales).",a:D.h.ca/D.lou,tol:.01,h:"CA hébergement ÷ chambres louées.",m:fmt(D.h.ca)+" ÷ "+fmt(D.lou)+" = <b>"+fmt(D.h.ca/D.lou)+" €</b>."},
+{r:3,ic:"📅",nm:"Le planning de réservation",q:"Calculez le <b>taux d’occupation</b> (%, 1 décimale). Capacité = 30 chambres × 300 jours.",a:r1(D.lou/CH*100),tol:.1,h:"Chambres louées ÷ capacité (9 000) × 100.",m:fmt(D.lou)+" ÷ "+fmt(CH)+" × 100 = <b>"+fmt(r1(D.lou/CH*100),1)+" %</b>."},
+{r:3,ic:"💶",nm:"Le coffre de la réception",q:"Calculez le <b>RevPAR</b> (€, 2 décimales).",a:D.h.ca/CH,tol:.02,h:"CA hébergement ÷ capacité de l’hôtel (ou taux d’occupation × prix moyen).",m:fmt(D.h.ca)+" ÷ "+fmt(CH)+" = <b>"+fmt(D.h.ca/CH)+" €</b>."},
+{r:3,ic:"🧾",nm:"Le bloc d’additions",q:"Calculez la <b>recette moyenne par couvert</b> (ticket moyen, €, 2 décimales).",a:D.r.ca/D.cov,tol:.01,h:"CA restauration ÷ couverts servis.",m:fmt(D.r.ca)+" ÷ "+fmt(D.cov)+" = <b>"+fmt(D.r.ca/D.cov)+" €</b>."},
+{r:3,ic:"🍴",nm:"Le plan de salle",q:"Calculez le <b>taux de remplissage du restaurant</b> (%, 1 décimale). Capacité = 48 couverts × 2 services × 250 jours.",a:r1(D.cov/CR*100),tol:.1,h:"Couverts servis ÷ capacité (24 000) × 100.",m:fmt(D.cov)+" ÷ "+fmt(CR)+" × 100 = <b>"+fmt(r1(D.cov/CR*100),1)+" %</b>."},
+{r:3,ic:"☕",nm:"La salle des petits-déjeuners",q:"Calculez le <b>taux de captage des petits déjeuners</b> (%, 1 décimale).",a:r1(D.pdj/D.cli*100),tol:.1,h:"Petits déjeuners servis ÷ clients de l’hôtel × 100.",m:fmt(D.pdj)+" ÷ "+fmt(D.cli)+" × 100 = <b>"+fmt(r1(D.pdj/D.cli*100),1)+" %</b>."}
+];
+var N=Q.length,$=document.getElementById("app"),s={ph:"intro"};
+(function(){var c={};Q.forEach(function(q,i){c[q.r]=(c[q.r]||0);q.p=c[q.r]++;q.d=DG[q.r][q.p]})})();
+function code(r){return DG[r].join("")}
+function left(){return Math.max(0,2700-Math.floor(((s.tf||Date.now())-s.t0)/1000)-s.pen)}
+function mm(t){return Math.floor(t/60)+":"+("0"+t%60).slice(-2)}
+function shuf(n){var a=[];for(var i=0;i<n;i++)a.push(i);return a.sort(function(){return Math.random()-.5})}
+setInterval(function(){if(!s.t0||s.tf||s.ph=="over")return;var c=document.getElementById("clk");if(left()<=0){s.ph="over";s.open=-1;render();return}if(c){c.textContent="⏱ "+mm(left());c.className=left()<300?"low":""}},1000);
+function start(){s={ph:"room",room:0,done:{},keys:[],t0:Date.now(),pen:0,open:-1,dos:0,err:0,hn:0,msg:""};render()}
+function pen(sec){s.pen+=sec;if(left()<=0)s.ph="over"}
+function openQ(i){s.open=i;s.e=0;s.h=0;s.ok=s.done[i]?1:0;s.msg=s.ok?"✅ "+Q[i].m:"";s.ord=Q[i].o?shuf(Q[i].o.length):[];render()}
+function closeQ(){s.open=-1;s.msg="";render()}
+function dos(v){s.dos=v;render()}
+function good(){var q=Q[s.open];s.done[s.open]=1;s.ok=1;s.msg="✅ Bien joué ! "+q.m;render()}
+function bad(t){s.e++;s.err++;pen(60);s.msg=t+" (−1 min)";render()}
+function pick(j){j==Q[s.open].k?good():bad("❌ Ce n’est pas la bonne réponse.")}
+function chk(){var q=Q[s.open],e=document.getElementById("v"),v=parseFloat(e.value.replace(/[\s\u202f\u00a0€%]/g,"").replace(",","."));
+if(isNaN(v)){s.msg="Saisissez un nombre.";render();return}
+if(Math.abs(v-q.a)<=q.tol+1e-9)good();else bad(Math.abs(v-q.a)<=q.tol*6+1e-9?"❌ Presque ! Vérifiez l’arrondi.":"❌ Résultat incorrect.")}
+function hint(){s.h=1;s.hn++;pen(120);render()}
+function sol(){pen(300);s.hn++;good();s.msg="Solution (−5 min) : "+Q[s.open].m;render()}
+function door(){var r=s.room,v=document.getElementById("dc").value.replace(/\D/g,"");
+if(v==code(r)){s.keys.push(FIN[r]);if(r==3)s.ph="final";else{s.room++;}s.msg="";render()}
+else{s.msg=v.length?"🔒 Code incorrect (−1 min). Vérifiez l’ordre des chiffres.":"Saisissez le code.";if(v.length)pen(60);render()}}
+function fin(){var v=document.getElementById("fc").value.replace(/\D/g,"");
+if(v==FIN){s.tf=Date.now();s.ph="end";render()}else{s.msg="🔒 Combinaison incorrecte (−1 min). Reprenez les clés 🔑 de chaque porte.";pen(60);render()}}
+function hdr(){return '<div class="top"><b class="logo">🌲 Lac Vert</b><span id="clk">⏱ '+mm(left())+'</span><span>🔑 '+(s.keys.join(" ")||"–")+'</span><button class="sec" style="margin:0" onclick="dos(1)">📁 Dossier</button></div>'}
+function modal(){
+if(s.dos)return '<div class="ov"><div class="md"><h1>📁 Dossier documentaire</h1>'+DOS+'<button onclick="dos(0)">Fermer</button></div></div>';
+if(s.open>=0){var q=Q[s.open],h='<div class="ov"><div class="md"><span class="chip">'+q.ic+" "+q.nm+" · chiffre n°"+(q.p+1)+'</span><p>'+q.q+"</p>";
+if(!s.ok){if(q.o)h+=s.ord.map(function(j){return '<button class="opt" onclick="pick('+j+')">'+q.o[j]+"</button>"}).join("");
+else h+='<input id="v" inputmode="decimal" placeholder="Votre réponse" autocomplete="off" onkeydown="if(event.key===\'Enter\')chk()"> <button onclick="chk()">Valider</button>';
+h+="<div>"+(s.h?"":'<button class="sec" onclick="hint()">💡 Indice (−2 min)</button>')+(s.e>=2?'<button class="sec" onclick="sol()">Voir la solution (−5 min)</button>':"")+"</div>";
+if(s.h)h+='<div class="memo">💡 '+q.h+"</div>"}
+if(s.msg)h+='<div class="'+(s.ok?"okb":"ko")+'">'+s.msg+"</div>";
+if(s.ok)h+='<p class="center">Vous trouvez un papier : <b style="font-size:1.8rem;color:var(--ok)">'+q.d+"</b></p>";
+h+=(s.ok?"<button onclick='closeQ()'>Continuer la fouille</button>":"<button class='sec' onclick='closeQ()'>Fermer</button>")+"<button class='sec' onclick='dos(1)'>📁 Dossier</button></div></div>";return h}
+return ""}
+function render(){var h;
+if(s.ph=="intro")h='<div class="hero center"><div class="big">🔐</div><h1>Le coffre du Domaine du Lac Vert</h1><p>Escape game · Tableau de gestion (Dossier 5, Terminale STHR)</p></div><div class="card"><p>Mme Lenoir, gérante d’un hôtel-restaurant à Annecy, a perdu la combinaison du coffre qui contient son dossier de prêt bancaire. La banque l’attend dans <b>45 minutes</b> !</p><p>Fouillez chaque pièce : chaque objet cache une énigme de gestion. Une bonne réponse révèle un chiffre ; ensemble, ils forment le code de la porte. Quatre portes, quatre clés 🔑, un coffre final.</p><p class="mu">⏱ Erreur : −1 min · Indice : −2 min · Solution : −5 min · Le dossier 📁 est toujours consultable. Calculatrice conseillée.</p><button onclick="start()">Entrer dans le domaine</button></div>';
+else if(s.ph=="over")h='<div class="hero center"><div class="big">⌛</div><h1>Temps écoulé !</h1><p>La banque a fermé… Réessayez avec la méthode : consommations → marges → ratios → indicateurs.</p></div><button onclick="s={ph:\'intro\'};render()">Rejouer</button>';
+else if(s.ph=="end"){var t=left(),md=t>1200?"🥇 Contrôleur de gestion expert":t>600?"🥈 Bon analyste":"🥉 Coffre ouvert de justesse";
+h='<div class="hero center"><div class="big">🔓</div><h1>Coffre ouvert !</h1><p>Le dossier de prêt est sauvé.</p></div><div class="card center"><p><b>'+md+'</b></p><p>Temps restant : <b>'+mm(t)+'</b> · Erreurs : <b>'+s.err+'</b> · Indices/solutions : <b>'+s.hn+'</b></p><div class="memo" style="text-align:left"><b>Diagnostic pour Mme Lenoir :</b> CA '+fmt(K.ca)+' € · marge brute '+fmt(K.mb)+' € · RBE '+fmt(K.rbe)+' € · résultat courant '+fmt(K.rc)+' € ('+fmt(pc(K.rc),1)+' % du CA, norme 8–12 %). Le coût du personnel ('+fmt(pc(K.pe),1)+' %) et les frais généraux ('+fmt(pc(K.fg),1)+' %) dépassent les normes : c’est là qu’il faut agir.</div><button onclick="s={ph:\'intro\'};render()">Rejouer</button></div>'}
+else if(s.ph=="final"){h=hdr()+'<div class="hero center"><div class="big">🗝️</div><h1>Le coffre-fort</h1><p>Entrez les 4 clés 🔑 récupérées sur les portes, dans l’ordre des salles.</p></div><div class="card center"><div class="slots">'+s.keys.map(function(k){return '<span class="on">'+k+"</span>"}).join("")+'</div><input id="fc" inputmode="numeric" maxlength="4" placeholder="4 chiffres" onkeydown="if(event.key===\'Enter\')fin()"> <button onclick="fin()">Ouvrir le coffre</button>'+(s.msg?'<div class="ko">'+s.msg+"</div>":"")+"</div>"}
+else{var r=s.room,ro=R[r],ids=[];Q.forEach(function(q,i){if(q.r==r)ids.push(i)});var all=ids.every(function(i){return s.done[i]});
+h=hdr()+'<div class="hero"><div class="big">'+ro[0]+'</div><h1>Salle '+(r+1)+'/4 – '+ro[1]+'</h1><p>'+ro[2]+" Examinez chaque objet pour trouver les chiffres de la porte.</p></div>"+
+'<div class="grid">'+ids.map(function(i){var q=Q[i],d=s.done[i];return '<button class="obj'+(d?" dn":"")+'" onclick="openQ('+i+')"><span class="ic">'+q.ic+"</span><b>"+q.nm+"</b><small>"+(d?"✅ chiffre "+q.d:"🔍 À examiner")+"</small></button>"}).join("")+"</div>"+
+'<div class="card center"><b>🚪 Porte verrouillée</b><div class="slots">'+ids.map(function(i){return "<span class='"+(s.done[i]?"on":"")+"'>"+(s.done[i]?Q[i].d:"?")+"</span>"}).join("")+'</div><p class="mu">Saisissez les chiffres dans l’ordre des objets (de gauche à droite, de haut en bas).</p><input id="dc" inputmode="numeric" maxlength="8" placeholder="Code de la porte" onkeydown="if(event.key===\'Enter\')door()"> <button onclick="door()">Ouvrir</button>'+(s.msg&&s.open<0?'<div class="ko">'+s.msg+"</div>":"")+"</div>"}
+$.innerHTML=h+modal();var v=document.getElementById("v");if(v)v.focus()}
+render();
+</script></body></html>
